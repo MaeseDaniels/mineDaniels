@@ -10,6 +10,7 @@ var ancho = 0;
 var alto = 0;
 var minas = 0;
 var banderas = 0;
+
 var tablero = new Array();
 var coloresFondo = ["black", "white", "white", "white", "white", "white", "white", "white", "white", "white"];
 var coloresNum = ["white", "#0101DF", "#088A29", "#DF0101", "#0B0B61", "#DF7401", "#B40486", "#FFBF00", "#3B240B"];
@@ -30,20 +31,20 @@ function generaTablero(tam){
 	if(tam == 'f'){
 		ancho = 8;
 		alto = 8;
-    minas = 10;
-    banderas = 10;
+		minas = 10;
+		banderas = 10;
 	}
 	else if(tam == 'i'){
 		ancho = 16;
 		alto = 16;
-    minas = 40;
-    banderas = 40;
+		minas = 40;
+		banderas = 40;
 	}
 	else if(tam == 'd'){
 		ancho = 31;
 		alto = 16;
-    minas = 99;
-    banderas = 99;
+		minas = 99;
+		banderas = 99;
 	}
 
 	//console.log(tam +" " + ancho +" "+ alto);
@@ -122,14 +123,17 @@ function generaTableroT(){
         if($(event.target).attr("class").split(" ")[1] === "bandera"){
           banderas++;
           $(".nBanderas").html(banderas);
-        
+          $(event.target).toggleClass("bandera");
         }
-        else{
+        else if (banderas > 0){
           banderas--;
           $(".nBanderas").html(banderas);
-          
+          $(event.target).toggleClass("bandera");
         }
-        $(event.target).toggleClass("bandera");
+        
+		if(banderas === 0){
+		  compVictoria();  
+		}
       }
         
         return false;
@@ -270,4 +274,22 @@ function compvalor(x, y){
     }
     //console.log(tdid + " " + valor);
   }
+}
+
+function compVictoria(){
+	var contBan = 0;
+	$("td.bandera").each(
+		function(){
+			var idt = $(this).attr("id").split(",");
+			if(tablero[idt[0]][idt[1]] == "*"){
+				contBan++;
+			}
+			
+		}
+	)	
+	
+	if(contBan == minas){
+		//desarrollar victoria por aqui
+		alert("Victoria!");	
+	}
 }
